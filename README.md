@@ -10,9 +10,6 @@ Build Tool: Maven
 Application Flow
 User Authentication (Spring Security):
 
-Provides links to manage Patients, Doctors, Appointments, and Medical Records.
-Displays a welcome message.
-
 Users can navigate to the Patient Management section to add, edit, view, or delete patients.
 Add/Edit Patient: Users fill out a form with patient details (name, email, phone, address) and submit it to save.
 View Patient Details: Displays detailed information about the patient along with their appointments and medical records.
