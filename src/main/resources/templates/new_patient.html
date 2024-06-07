@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Patient</title>
+</head>
+<body>
+<h1>New Patient form</h1>
+<form th:action = "@{/api/health-mgmt/patients}" th:object ="${patient}" method="post">
+    <label>Name</label>
+    <input type ="text"  th:field = "*{name}" /><br/>
+    <label> Email </label>
+    <input type = "text" th:field = "*{email}"><br/>
+    <label> Phone </label>
+    <input type = "text" th:field = "*{phone}"><br/>
+    <label> Address </label>
+    <input type = "text" th:field = "*{address}"><br/>
+    <button type="submit">Save</button>
+</form>
+</body>
+</html>

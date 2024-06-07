@@ -4,11 +4,13 @@ package com.healthcare.Patient_management.controller;
 import com.healthcare.Patient_management.model.Appointment;
 import com.healthcare.Patient_management.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api/health-mgmt/appt")
 public class AppointmentController
 {
@@ -16,36 +18,49 @@ public class AppointmentController
     private AppointmentService appointmentService;
 
     @PostMapping
-    public Appointment saveAppt(@RequestBody Appointment appointment)
+    public String saveAppt(@ModelAttribute("appointment") Appointment appointment)
     {
-        return appointmentService.saveAppointment(appointment);
+        appointmentService.saveAppointment(appointment);
+        return "redirect:/api/health-mgmt/appt";
     }
 
     @GetMapping("/{id}")
-    public Appointment getApptById(@PathVariable Long id)
+    public String getApptById(@PathVariable Long id, Model model)
     {
-        return appointmentService.appointmentsById(id);
+        Appointment appt = appointmentService.appointmentsById(id);
+        model.addAttribute("appointment", appt);
+        return "appointment";
+
     }
     @GetMapping("/{patientId}")
-    public List<Appointment> getApptByPatientId(@PathVariable Long patientId)
+    public String getApptByPatientId(@PathVariable Long patientId, Model model)
     {
-        return appointmentService.appointmentsByPatientId(patientId);
+        List<Appointment> apptListByPatient =  appointmentService.appointmentsByPatientId(patientId);
+        model.addAttribute("appointments", apptListByPatient);
+        return "patientappointments";
     }
     @GetMapping
-    public List<Appointment> getAllPatients()
+    public String getAllAppointments(Model model)
+
     {
-        return appointmentService.patientAppointments();
+        List<Appointment> appointments = appointmentService.patientAppointments();
+        model.addAttribute("appointmentlist", appointments);
+        return "appointments";
     }
 
-    @PutMapping("/{id}")
-    public Appointment updateAppt(@PathVariable Long id, @RequestBody Appointment appointment)
+    @PostMapping("edit/{id}")
+    public String updateAppt(@PathVariable Long id, @ModelAttribute("appointment") Appointment appointment)
     {
-        return appointmentService.updateApptTime(id,appointment);
+        Appointment appt = appointmentService.updateApptTime(id, appointment);
+        return "redirect:/api/health-mgmt/appt";
+
     }
-    @DeleteMapping("/id")
-    public void deleteAppointments(@PathVariable Long id)
+    @GetMapping("delete/id")
+    public String deleteAppointments(@PathVariable Long id)
+
     {
         appointmentService.deleteAppointment(id);
+        return "redirect:/api/health-mgmt/appt";
     }
 }
 

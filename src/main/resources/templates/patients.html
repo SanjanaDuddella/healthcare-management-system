@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient</title>
+</head>
+<body>
+<h1>Patient Page</h1>
+<a href="/">Home page</a>
+<a href="/api/health-mgmt/patients/new">Add a new patient</a>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="patient:${patients}">
+        <td th:text = "${patient.id}"></td>
+        <td th:text = "${patient.name}"></td>
+        <td th:text = "${patient.email}"></td>
+        <td th:text = "${patient.phone}"></td>
+        <td th:text = "${patient.address}"></td>
+        <td>
+            <a th:href="@{/api/health-mgmt/patients/edit/{id}(id = ${patient.id})}">Edit Patient</a>
+            <a th:href="@{/api/health-mgmt/patients/delete/{id}(id = ${patient.id})}">Delete Patient</a>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

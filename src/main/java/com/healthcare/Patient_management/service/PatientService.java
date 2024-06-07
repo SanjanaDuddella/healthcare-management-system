@@ -32,10 +32,11 @@ public class PatientService
     public Patient updateDetails(Long id, Patient patient)
     {
         Patient details = patientRepo.findById(id).orElseThrow(() -> new ResourceNotFound("No patient record found to update"));
+        details.setName(patient.getName());
         details.setEmail(patient.getEmail());
         details.setAddress(patient.getAddress());
         details.setPhone(patient.getPhone());
-        return details;
+        return patientRepo.save(details);
     }
 
      public void deletePatient(Long id)

@@ -3,11 +3,13 @@ package com.healthcare.Patient_management.controller;
 import com.healthcare.Patient_management.model.Patient;
 import com.healthcare.Patient_management.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api/health-mgmt/patients")
 public class PatientController
 {
@@ -15,32 +17,51 @@ public class PatientController
     private PatientService patientService;
 
     @PostMapping
-    public Patient savePatient(@RequestBody Patient patient)
+    public String savePatient(@ModelAttribute("patient") Patient patient)
     {
-        return patientService.savePatient(patient);
+        patientService.savePatient(patient);
+        return "redirect:/api/health-mgmt/patients";
     }
-
+    @GetMapping("/new")
+    public String showNewPatientForm(Model model) {
+        model.addAttribute("patient", new Patient());
+        return "new_patient";
+    }
     @GetMapping("/{id}")
-    public Patient getPatientById(@PathVariable Long id)
+    public String getPatientById(@PathVariable Long id, Model model)
+
     {
-        return patientService.getPatientById(id);
+        Patient patient = patientService.getPatientById(id);
+        model.addAttribute("patient", patient);
+        return "patient_detail";
     }
 
     @GetMapping
-    public List<Patient> getAllPatients()
+    public String getAllPatients(Model model)
+
     {
-        return patientService.getAllPatients();
+        List<Patient> patientList = patientService.getAllPatients();
+        model.addAttribute("patients", patientList);
+        return "patients";
     }
 
-    @PutMapping("/{id}")
-    public Patient updatePatient(@PathVariable Long id, @RequestBody Patient patient)
+    @GetMapping("edit/{id}")
+    public String showEditPatientForm(@PathVariable Long id, Model model) {
+        Patient patient = patientService.getPatientById(id);
+        model.addAttribute("patient", patient);
+        return "edit_patient";
+    }
+    @PostMapping("/{id}")
+    public String updatePatient(@PathVariable Long id, @ModelAttribute("patient") Patient patient)
     {
-        return patientService.updateDetails(id,patient);
+        patientService.updateDetails(id, patient);
+        return "redirect:/api/health-mgmt/patients";
     }
 
-    @DeleteMapping("/id")
-    public void deletePatient(@PathVariable Long id)
+    @GetMapping("delete/{id}")
+    public String deletePatient(@PathVariable Long id)
     {
          patientService.deletePatient(id);
+         return "redirect:/api/health-mgmt/patients";
     }
 }
